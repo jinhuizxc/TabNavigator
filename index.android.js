@@ -2,31 +2,50 @@
  * Sample React Native App
  * https://github.com/facebook/react-native
  * @flow
+ *
+ * 1.导入react-native-tab-navigator方式：
+ * cmd项目路径下执行npm install react-native-tab-navigator --save
+ * 2.加入侧滑
  */
-
 import React, {Component} from 'react';
-
 import {
     AppRegistry,
     StyleSheet,
     Text,
     View,
-    Image
+    Image,
+    DrawerLayoutAndroid
 } from 'react-native';
-//导入react-native-tab-navigator方式：
-//cmd项目路径下执行npm install react-native-tab-navigator --save
+
+import MenuList from './MenuList';
 import TabNavigator from 'react-native-tab-navigator'
+
 export default class Tabnavigator extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            selectedTab: 'Event'
+            selectedTab: 'Event',
         }
     }
 
+    onMenuItem(position) {
+        alert(position);
+    }
+
     render() {
+        var navigationView = (
+            <MenuList
+                onMenuItem={this.onMenuItem.bind(this)}/>
+        );
         return (
             <View style={styles.container}>
+                <DrawerLayoutAndroid
+                    ref='drawer'
+                    drawerWidth={300}
+                    drawerPosition={DrawerLayoutAndroid.positions.left}
+                    renderNavigationView={() => navigationView}
+                    onDrawerOpen={() => this.setState({isMenuOpen: true})}
+                    onDrawerClose={() => this.setState({isMenuOpen: false})}>
               <TabNavigator>
                 <TabNavigator.Item
                     //设置选中的位置
@@ -84,6 +103,7 @@ export default class Tabnavigator extends Component {
                   </View>
                 </TabNavigator.Item>
               </TabNavigator>
+                </DrawerLayoutAndroid>
             </View>
         );
     }
